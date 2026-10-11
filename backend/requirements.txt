@@ -1,0 +1,18 @@
+anthropic==1.13.0
+dnspython==2.9.0
+fastapi==0.143.0
+httpx==0.28.1
+networkx==3.7
+numba==0.68.0
+numpy==2.4.6
+pandapower==3.5.6
+pandas==2.3.3
+pydantic==2.14.1
+pymongo[srv]==4.18.3
+python-dotenv==1.2.4
+scipy==1.18.1
+simbench==1.6.3
+uvicorn[standard]==0.54.0
+# tests
+pytest==9.1.1
+pytest-cov==7.1.0
