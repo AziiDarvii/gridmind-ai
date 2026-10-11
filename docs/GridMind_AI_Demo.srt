@@ -1,0 +1,223 @@
+1
+00:00:00,000 --> 00:00:05,838
+Hi, this is GridMind AI, built for the MongoDB Harness Engineering and Model Wrangling hackathon.
+
+2
+00:00:05,838 --> 00:00:17,213
+GridMind is a multi-agent harness that analyzes a real electrical grid, fixes it, proves the fix, and remembers what worked, with MongoDB Atlas as its memory and its single source of truth.
+
+3
+00:00:18,113 --> 00:00:22,747
+AI data centers are adding megawatts to grids that were built for homes and shops.
+
+4
+00:00:22,747 --> 00:00:29,811
+Our demo network is the public CIGRE medium voltage benchmark, with a four megawatt AI data center connected at bus fourteen.
+
+5
+00:00:29,811 --> 00:00:33,258
+The overview shows what the solver found at the evening peak:
+
+6
+00:00:33,258 --> 00:00:34,445
+seventeen violations.
+
+7
+00:00:34,445 --> 00:00:41,961
+Fourteen buses are below the voltage limit, the lowest at zero point eight nine five per unit, and three transformers are overloaded.
+
+8
+00:00:41,961 --> 00:00:46,369
+Every number on every page is read from a power flow result stored in MongoDB.
+
+9
+00:00:47,269 --> 00:00:49,053
+This is the heart of the app:
+
+10
+00:00:49,053 --> 00:00:53,852
+the complete single line diagram, generated from the circuit model in MongoDB.
+
+11
+00:00:53,852 --> 00:01:01,419
+Every bus, line, transformer, load and data center device is drawn, and each violation is colored exactly where it happens.
+
+12
+00:01:01,419 --> 00:01:03,696
+Orange is a violation, red is severe.
+
+13
+00:01:03,696 --> 00:01:10,894
+Ten layers switch the view between voltage, loading, current, active and reactive power, losses, and the data center.
+
+14
+00:01:11,794 --> 00:01:14,428
+Click any component to see everything about it.
+
+15
+00:01:14,428 --> 00:01:19,809
+Here is bus eleven, at zero point nine two three per unit, or eighteen point four six kilovolts.
+
+16
+00:01:19,809 --> 00:01:29,673
+Every parameter is tagged as source input or assumption, and the panel shows the diagnosed cause, the supply path from the grid, and its history across every stored simulation.
+
+17
+00:01:30,573 --> 00:01:34,311
+Pressing Run starts ten specialized agents in a dependency graph.
+
+18
+00:01:34,311 --> 00:01:37,935
+Circuit modeling, power flow and violation detection run first.
+
+19
+00:01:37,935 --> 00:01:41,443
+Root cause, data center and memory retrieval run in parallel.
+
+20
+00:01:41,443 --> 00:01:48,748
+Then corrective action, optimization and independent verification repeat in a bounded loop until the network is proven healthy.
+
+21
+00:01:48,748 --> 00:01:55,707
+Every task and the full run state are written to MongoDB after each step, so a run survives a restart and can be resumed.
+
+22
+00:01:56,607 --> 00:01:59,365
+The root cause agent explains why, with numbers.
+
+23
+00:01:59,365 --> 00:02:09,303
+It splits the voltage drop along every supply path into its resistive and reactive parts, checks transformer tap headroom, and solves the grid again without the data center.
+
+24
+00:02:09,303 --> 00:02:11,774
+Feeder one fails because of line impedance.
+
+25
+00:02:11,774 --> 00:02:15,278
+The data center buses fail because of the data center itself.
+
+26
+00:02:16,178 --> 00:02:23,222
+The corrective action agent generates nineteen remedies that match those causes, and sizes each one by simulation:
+
+27
+00:02:23,222 --> 00:02:32,492
+capacitor banks from a measured voltage sensitivity, tap positions from a full sweep, transformer upgrades, tie switches, and data center flexibility.
+
+28
+00:02:32,492 --> 00:02:38,238
+The ranked plans compare voltage, loading, losses, cost and residual violations side by side.
+
+29
+00:02:39,138 --> 00:02:44,342
+The optimizer evaluated one hundred seventy nine plans, each with real AC power flows.
+
+30
+00:02:44,342 --> 00:02:48,215
+Its proposal, drawn in purple, costs sixty two thousand dollars:
+
+31
+00:02:48,215 --> 00:02:59,409
+a fifteen hundred kilovar capacitor bank, three tap steps on one transformer, shifting a third of a megawatt of AI training out of the evening peak, and discharging the on-site battery.
+
+32
+00:03:00,309 --> 00:03:01,887
+Then governance takes over.
+
+33
+00:03:01,887 --> 00:03:05,629
+The independent verification agent does not trust the optimizer.
+
+34
+00:03:05,629 --> 00:03:10,365
+It reloads the model from MongoDB and solves it again, at peak and at light load.
+
+35
+00:03:10,365 --> 00:03:13,464
+Only then does the app label the circuit as verified.
+
+36
+00:03:13,464 --> 00:03:14,809
+Zero violations remain.
+
+37
+00:03:15,709 --> 00:03:18,888
+The before and after page proves it in the same layout:
+
+38
+00:03:18,888 --> 00:03:21,490
+seventeen resolved, zero remaining, zero new.
+
+39
+00:03:21,490 --> 00:03:29,410
+Minimum voltage rises from zero point eight nine five to zero point nine five three per unit, and network losses drop by about a quarter.
+
+40
+00:03:30,310 --> 00:03:34,285
+The data center is part of the same network, not a separate dashboard.
+
+41
+00:03:34,285 --> 00:03:43,426
+Cooling follows real weather from Open Meteo, homes and businesses follow public SimBench load profiles, and a twenty four hour AC time series checks every hour.
+
+42
+00:03:43,426 --> 00:03:49,445
+A linear program then moves flexible AI training to cheaper hours without breaking a single network limit.
+
+43
+00:03:50,345 --> 00:03:52,366
+This is the memory of the harness.
+
+44
+00:03:52,366 --> 00:03:56,884
+After verification, the learning agent stores structured lessons in MongoDB:
+
+45
+00:03:56,884 --> 00:04:01,104
+which remedy worked, for which violation, with its measured parameters.
+
+46
+00:04:01,104 --> 00:04:09,545
+When we ran a second scenario, an AI training surge, the agents retrieved those lessons, tried the proven plan first, and were verified again.
+
+47
+00:04:09,545 --> 00:04:11,625
+The system improves with every run.
+
+48
+00:04:12,525 --> 00:04:14,400
+We are explicit about our claims.
+
+49
+00:04:14,400 --> 00:04:21,216
+The objective function is shown in full, and the result is called the best of the evaluated plans, not a proven optimum.
+
+50
+00:04:21,216 --> 00:04:24,284
+The language model never calculates electrical values.
+
+51
+00:04:24,284 --> 00:04:26,669
+It only explains evidence from the solver.
+
+52
+00:04:27,569 --> 00:04:33,841
+Finally, the report agent writes a complete engineering report from the stored results, ready to download and share.
+
+53
+00:04:34,741 --> 00:04:40,142
+GridMind AI is a persistent, self-improving and governed agent harness on MongoDB Atlas.
+
+54
+00:04:40,142 --> 00:04:44,008
+It turns a failing grid into a verified plan in about a minute.
+
+55
+00:04:44,008 --> 00:04:49,102
+The code is on GitHub at github dot com, slash Azii Darvii, slash gridmind dash ai.
+
+56
+00:04:49,102 --> 00:04:49,715
+Thank you.
